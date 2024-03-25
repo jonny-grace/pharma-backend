@@ -428,6 +428,16 @@ router.get('/receptions', async (req, res) => {
   }
 });
 
+//get all nurses
+router.get('/nurses', async (req, res) => {
+  try {
+    const nurses = await nurseModel.find();
+    return res.status(200).json(nurses);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'An error occurred' });
+  }
+});
 //here lets get all doctors from doctors table
 router.get('/doctors', async (req, res) => {
   try {
@@ -476,6 +486,28 @@ router.put('/doctor/status/:userId', async (req, res) => {
     return res.status(500).json({ message: 'An error occurred' });
   }
 });
+
+// lets change the nurse status using its userid and the status from req.body
+router.put('/nurse/status/:userId', async (req, res) => {
+  // console.log(req.body);
+  try {
+    const { status } = req.body;
+    const { userId } = req.params;
+    const nurse = await nurseModel.findOne({ userId });
+    if (!nurse) {
+      return res.status(404).json({ message: 'Nurse not found' });
+    }
+    nurse.status = 'active';
+    await nurse.save();
+    return res.status(200).json({ message: 'Nurse status updated successfully' });
+  }catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'An error occurred' });
+  }
+});
+
+
+
 
 // lets change the pharmacy status using its userId and the status from req.body 
 router.put('/pharmacy/status/:userId', async (req, res) => {

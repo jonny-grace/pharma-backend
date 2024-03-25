@@ -14,7 +14,7 @@ const pharmaModel = require("../models/pharma.model");
 const { getIO } = require("../utils/io");
 const io = getIO();
 const secretKey = "your_secret_key";
-// Middleware to verify the JWT token
+// Middleware to verify the JWT toke
 const verifyToken = (req, res, next) => {
   const token = req.header("Authorization");
   if (!token) return res.status(401).json({ message: "Access denied" });
@@ -30,10 +30,13 @@ const verifyToken = (req, res, next) => {
 
 // get a single patient data from patient table using patient id from req.params.id
 router.get("/patient/:id", async (req, res) => {
-  const id = req.params.id;
+  const id = new RegExp(req.params.id, "i");
+  // const id = req.params.id;
+  console.log(id);
   try {
     const patient = await patientModel.findOne({ patientId: id });
     if (!patient) {
+      console.log("patient not found");
       return res.status(404).json({
         message: "Patient not found",
       });
@@ -48,7 +51,7 @@ router.get("/patient/:id", async (req, res) => {
       today.getDate();
     const apointment = await apointmentModel.findOne({
       patientId: id,
-      apointmentDate: date,
+      apointmentDate: date, 
       status: "active",
     });
 
@@ -58,7 +61,7 @@ router.get("/patient/:id", async (req, res) => {
         message: "Patient have a today active appointment",
       });
     }
-    res.json(patient);
+    res.json({patient,date});
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -69,16 +72,18 @@ router.post("/patient/:id/appointment", async (req, res) => {
   try {
     const id = req.params.id;
     const {
-      bloodPressure,
-      temperature,
-      respiratoryRate,
-      pulseRate,
-      weight,
-      height,
+      bloodPresure,
       bmi,
-      o2Saturation,
+      height,
+      o2_saturation,
+      pulse_rate,
+      respiratory_rate,
+      weight,
+      
+     
+      
     } = req.body;
-
+console.log(req.body);
     const today = new Date();
     const date =
       today.getFullYear() +
@@ -98,17 +103,15 @@ router.post("/patient/:id/appointment", async (req, res) => {
         message: "Patient have a today active appointment",
       });
     }
-
     const apointment = new apointmentModel({
       patientId: id,
-      bloodPressure,
-      temperature,
-      respiratoryRate,
-      pulseRate,
+      bloodPresure,
+      respiratory_rate,
+      pulse_rate,
       weight,
       height,
       bmi,
-      o2Saturation,
+      o2_saturation,
       apointmentDate: date,
     });
 

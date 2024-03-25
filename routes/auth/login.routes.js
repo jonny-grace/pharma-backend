@@ -7,6 +7,7 @@ const pharmaModel = require("../../models/pharma.model");
 const maldoReceptionModel = require("../../models/maldoReception.model");
 const doctorModel = require("../../models/doctor.model");
 const adminModel = require("../../models/admin.model");
+const nurseModel = require("../../models/nurse.model");
 
 // Middleware to verify the JWT token
 const verifyToken = (req, res, next) => {
@@ -60,6 +61,10 @@ router.post('/', async (req, res) => {
    if(user.role==='doctor'){
     const doctor=await doctorModel.findOne({userId:user._id});
      status=doctor.status ? doctor.status:'';
+   }
+   if(user.role==='nurse'){
+    const nurse=await nurseModel.findOne({userId:user._id});
+     status=nurse.status ? nurse.status:'';
    }
    
     if (!user) {

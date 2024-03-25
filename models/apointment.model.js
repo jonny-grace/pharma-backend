@@ -1,17 +1,18 @@
 const mongoose = require('mongoose');
 
 const apointmentSchema = new mongoose.Schema({
+
   patientId: {
     type: String,
     ref: 'Patient',
   },
-  bloodPressure: {
+  bloodPresure: {
     type: String,
   },
-  respiratoryRate: {
+  respiratory_rate: {
     type: String,
   },
-  pulseRate: {
+  pulse_rate: {
     type: String,
   },
   weight: {
@@ -23,7 +24,7 @@ const apointmentSchema = new mongoose.Schema({
   bmi: {
     type: String,
   },
-  o2Saturation: {
+  o2_saturation: {
     type: String,
   },
   status: {

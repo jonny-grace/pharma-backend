@@ -86,7 +86,7 @@ router.post('/', async (req, res) => {
 
   });
   
-  //Registration for reception
+  //Registration for admin
 router.post('/register/admin', async (req, res) => {
   try {
     const { firstname, lastname, username, phoneNumber, email,age,location,password } = req.body;
@@ -136,7 +136,7 @@ router.post('/register/admin', async (req, res) => {
     // Save the doctor in the doctors table
     await admin.save();
 
-    return res.status(200).json({ message: 'Reception registered successfully' });
+    return res.status(200).json({ message: 'Admin registered successfully' });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'An error occurred' });
