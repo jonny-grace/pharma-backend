@@ -31,6 +31,16 @@ const verifyToken = (req, res, next) => {
 // Get single Patient
 router.get("/patient/:id", async (req, res) => {
   try {
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, secretKey);
+
+    // Check if the decoded email belongs to a user with the admin role
+    const userId = decoded.userId;
+
+    // Find the user detail from the doctors table using the userId
+    const doctorDetail = await doctorModel.findOne({ userId: userId });
+    console.log(doctorDetail);
+
     const modifiedId = new RegExp(req.params.id, "i");
     const patient = await patientModel.findOne({ patientId: modifiedId });
     // here lets check if the patient have active appoint with patientId,status,apointmentdate
@@ -46,7 +56,7 @@ router.get("/patient/:id", async (req, res) => {
     // here create a variable called general patient Info and add all patient data and apointment data in there and send it as a single response 
    
 
-    res.json({patient,apointment});
+    res.json({patient,apointment,doctorDetail});
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
