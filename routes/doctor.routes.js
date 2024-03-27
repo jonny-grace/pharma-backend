@@ -39,26 +39,30 @@ router.get("/patient/:id", async (req, res) => {
 
     // Find the user detail from the doctors table using the userId
     const doctorDetail = await doctorModel.findOne({ userId: userId });
-    console.log(doctorDetail);
-
-    const modifiedId = new RegExp(req.params.id, "i");
+    
+const patientId = req.params.id;
+    const modifiedId = new RegExp(patientId, "i");
     const patient = await patientModel.findOne({ patientId: modifiedId });
+    console.log(modifiedId);
     // here lets check if the patient have active appoint with patientId,status,apointmentdate
     const today = new Date();
     const date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
     const apointment = await apointmentModel.findOne({ patientId: modifiedId, status: "active", apointmentDate: date });
-    if (!apointment) {
-      return res.status(409).json({ message: "Patient does not fill vital signs" });
-    }
     if (!patient) {
-      return res.status(404).json({ message: "Patient not found" });
+      return res.send({message: "Patient not found"});
     }
+    if (!apointment) {
+      console.log('apointment not found');
+      return res.send({message:'apointment not found'});
+    }
+   
     // here create a variable called general patient Info and add all patient data and apointment data in there and send it as a single response 
    
 
+    console.log({patient,apointment,doctorDetail})
     res.json({patient,apointment,doctorDetail});
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    // res.status(500).json({ message: err.message });
   }
 });
 router.get("/patientforprescription/:id", async (req, res) => {
@@ -82,7 +86,7 @@ router.get("/patientforprescription/:id", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-
+ 
 // Get all assigned apointments
 router.get("/appointments", async (req, res) => {
   try {
