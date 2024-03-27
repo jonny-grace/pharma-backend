@@ -209,9 +209,14 @@ router.post("/create/prescription", async (req, res) => {
 
     // Calculate the end time (current time + 10 minutes)
     const endTime = new Date(currentTime.getTime() + 5 * 60000); 
-    // Create a new Prescription instance
+    
 
-     // Create a new Prescription instance
+    // Generate a unique prescription reference
+const year = currentTime.getFullYear().toString().slice(-2); // Get the last two digits of the year
+const month = (currentTime.getMonth() + 1).toString().padStart(2, '0'); // Get the month with leading zero if needed
+const uniqueNumber = Math.floor(1000 + Math.random() * 9000); // Generate a random 4-digit number
+const prescriptionionReference = `M-P-R${year}${month}${uniqueNumber}`;
+     // Create a new Prescription instance 
      const prescription = new prescriptionModel({
       apointmentId,
       patientId,
@@ -223,7 +228,8 @@ router.post("/create/prescription", async (req, res) => {
       currentTime,
       endTime, 
       timerStatus: "active",
-      dignosticsResult
+      dignosticsResult,
+      prescriptionionReference
 
     });
 

@@ -10,6 +10,10 @@ const prescriptionSchema = new mongoose.Schema({
     type: String,
     ref: 'Doctor',
   },
+  prescriptionionReference: {
+    type: String,
+    default: '',
+  },
   patientFullName: String,
   patientAge: String,
   apointmentId:{

@@ -138,6 +138,7 @@ app.use('/user', require('./routes/users.routes'));
 app.use('/login', require('./routes/auth/login.routes'));
 app.use('/admin', require('./routes/admin.routes'));
 app.use('/nurse', require('./routes/nurse.routes'));
+app.use('/pharmaciest', require('./routes/pharmaciest.routes'));
 app.use('/reception', require('./routes/reception.routes'));
 app.use('/pharmacy', require('./routes/pharmacy.routes'));
 app.use('/doctor', require('./routes/doctor.routes'));
