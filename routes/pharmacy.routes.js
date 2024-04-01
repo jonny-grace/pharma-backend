@@ -270,9 +270,9 @@ router.get("/prescription/:Prid", authenticatePharmacy, async (req, res) => {
     // Loop through each medicine
     for (const medicine of medicines) {
       // Extract the relevant medicine details
-      const { name, description } = medicine;
+      const { name, description,quantity,essentiality } = medicine;
       // Add the medicine details to the medicineDetails array
-      medicineDetails.push({ name, description });
+      medicineDetails.push({ name, description,quantity,essentiality });
     }
 
     const updatedPrescription = {

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const medicineSchema = new mongoose.Schema({
-  prescriptionId: String,
+  prescriptionId: String, 
   name: String,
   description: String,
   quantity: Number,
@@ -17,6 +17,7 @@ const medicineSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  countryOfOrigin: String,
 });
 
 module.exports = mongoose.model("Medicine", medicineSchema);

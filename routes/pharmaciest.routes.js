@@ -28,44 +28,7 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-// get a single patient data from patient table using patient id from req.params.id
-router.get("/patient/:id", async (req, res) => {
-  const id = new RegExp(req.params.id, "i");
-  // const id = req.params.id;
-  console.log(id);
-  try {
-    const patient = await patientModel.findOne({ patientId: id });
-    if (!patient) {
-      console.log("patient not found");
-      return res.status(404).json({
-        message: "Patient not found",
-      });
-    }
-    // here before sending the response lets check if the patient have a today active appointment with patientId and current date
-    const today = new Date();
-    const date =
-      today.getFullYear() +
-      "-" +
-      (today.getMonth() + 1) +
-      "-" +
-      today.getDate();
-    const apointment = await apointmentModel.findOne({
-      patientId: id,
-      apointmentDate: date, 
-      status: "active",
-    });
 
-    // i if the appointment is found i want to send the patient data with a message say active appointment
-    if (apointment) {
-      return res.status(404).json({
-        message: "Patient have a today active appointment",
-      });
-    }
-    res.json({patient,date});
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
 
 // create an appointment for the patient by getting the patient id from req.params and some datas from the req.body blood presure and weight and create appointment for the patient with this data and todays date
 router.post("/patient/:id/appointment", async (req, res) => {
@@ -123,36 +86,27 @@ console.log(req.body);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-});
+}); 
 
 // Get single Patient
-router.get("/patient/:id", async (req, res) => {
+router.get("/patient/prescription/:id", async (req, res) => {
   const id = req.params.id;
-  try {
-    const apointment = await apointmentModel.findOne({ _id: id });
-    const patientId = apointment.patientId;
-    const doctorId = apointment.doctorId;
-    const patient = await patientModel.findOne(
-      { patientId },
-      { firstname: 1, lastname: 1, age: 1, patientId: 1 }
-    );
-    const doctor = await doctorModel.findOne(
-      { userId: doctorId },
-      { firstname: 1, lastname: 1, speciality: 1 }
-    );
+  const modifiedId = new RegExp(id, "i");
+  console.log(modifiedId); 
+  try{ 
+    const prescription = await prescriptionModel.find({ patientId: modifiedId });
+   
+    console.log(prescription);
+    if (!prescription) {
+      console.log("prescription not found");
+      return res.status(404).json({
+        message: "prescription not found",
+      });
 
-    if (!patient) {
-      return res.status(404).json({ message: "Patient not found" });
+      
     }
-    if (!doctor) {
-      return res.status(404).json({ message: "Patient not found" });
-    }
-
-    const apointmentData = {
-      patient,
-      doctor,
-    };
-    res.json(apointmentData);
+    res.json({ prescription });
+    // here before sending the response lets check if the patient have a today active
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
