@@ -117,14 +117,16 @@ router.get("/patient/prescription/:id/medicine", async (req, res) => {
  
   try {
     const medicines = await medicineModel.find({ prescriptionId });
-    console.log(medicines);
+    const prescription = await prescriptionModel.findById(prescriptionId);
+   
+    console.log(prescription);
     if (!medicines) {
       console.log("medicines not found");
       return res.status(404).json({
         message: "medicines not found",
       });
     }
-    res.json({ medicines });
+    res.json({ medicines,prescription });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
