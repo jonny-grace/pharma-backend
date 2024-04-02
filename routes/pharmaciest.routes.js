@@ -111,6 +111,24 @@ router.get("/patient/prescription/:id", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+//get a medicine list for the given prescription id
+router.get("/patient/prescription/:id/medicine", async (req, res) => {
+  const prescriptionId = req.params.id;
+ 
+  try {
+    const medicines = await medicineModel.find({ prescriptionId });
+    console.log(medicines);
+    if (!medicines) {
+      console.log("medicines not found");
+      return res.status(404).json({
+        message: "medicines not found",
+      });
+    }
+    res.json({ medicines });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 router.post("/create/prescription", async (req, res) => {
   try {

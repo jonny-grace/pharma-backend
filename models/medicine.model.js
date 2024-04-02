@@ -17,7 +17,10 @@ const medicineSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  countryOfOrigin: String,
+  countryOfOrigin: {
+    type: String,
+    default: "",
+  },
 });
 
 module.exports = mongoose.model("Medicine", medicineSchema);
